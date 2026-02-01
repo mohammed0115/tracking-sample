@@ -1,0 +1,110 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "إضافة عينة جديدة" %}{% endblock %}
+{% block content %}
+<h1>{% trans "إضافة عينة جديدة" %}</h1>
+
+<div class="grid-3">
+    <div class="action-card green">{% trans "إضافة جديدة" %} <span>＋</span></div>
+    <a class="action-card blue" href="{% url 'sample-list-web' %}" style="color:#fff;text-decoration:none;">{% trans "قائمة العينات" %}</a>
+    <a class="action-card blue" href="{% url 'reports' %}" style="color:#fff;text-decoration:none;">{% trans "التقارير" %}</a>
+</div>
+
+<div class="spacer"></div>
+
+<div class="grid-2">
+    <div class="card">
+        <h3>{% trans "إحصائيات" %}</h3>
+        <div class="stat-card"><span>{% trans "المتوسط اليومي" %}</span><strong>5.4</strong></div>
+        <div class="stat-card"><span>{% trans "المتوسط الأسبوعي" %}</span><strong>2.1</strong></div>
+        <div class="stat-card"><span>{% trans "عينات اليوم" %}</span><strong>118</strong></div>
+    </div>
+    <div class="card">
+        <h3>{% trans "ملخص الأنواع والتصنيفات" %}</h3>
+        <div class="stat-card"><span>{% trans "دم" %}</span><strong>41</strong></div>
+        <div class="stat-card"><span>{% trans "أنسجة" %}</span><strong>27</strong></div>
+        <div class="stat-card"><span>{% trans "جنائية" %}</span><strong>18</strong></div>
+    </div>
+</div>
+
+<div class="spacer"></div>
+
+<div class="grid-main">
+    <div class="card">
+        <h3>{% trans "مؤشرات العينة" %}</h3>
+        <div class="stat-card"><span>{% trans "نوع العينة الأكثر تكراراً" %}</span><strong>دم</strong></div>
+        <div class="stat-card"><span>{% trans "التصنيف الأعلى" %}</span><strong>جنائية</strong></div>
+        <div class="stat-card"><span>{% trans "العينات قيد المراجعة" %}</span><strong>8</strong></div>
+    </div>
+
+    <div class="card">
+        <h3>{% trans "إضافة عينة" %}</h3>
+        <form method="post" class="grid-2">
+            {% csrf_token %}
+            <div>
+                <label>{% trans "نوع العينة" %}</label>
+                {{ form.sample_type }}
+            </div>
+            <div>
+                <label>{% trans "تاريخ العينة" %}</label>
+                {{ form.collected_date }}
+            </div>
+            <div>
+                <label>{% trans "اسم الشخص" %}</label>
+                {{ form.person_name }}
+            </div>
+            <div>
+                <label>{% trans "التصنيف" %}</label>
+                {{ form.category }}
+            </div>
+            <div>
+                <label>{% trans "الموقع" %}</label>
+                {{ form.location }}
+            </div>
+            <div>
+                <label>{% trans "RFID" %}</label>
+                {{ form.rfid }}
+            </div>
+            <div style="grid-column:1/-1;display:flex;gap:10px;">
+                <button class="btn btn-blue" type="submit">{% trans "حفظ" %}</button>
+                <button class="btn btn-green" type="submit" name="add_another">{% trans "حفظ وإضافة جديدة" %}</button>
+                <a href="{% url 'sample-list-web' %}" class="btn btn-gray">{% trans "رجوع" %}</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="spacer"></div>
+
+<div class="card">
+    <h3>{% trans "أحدث العينات" %}</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "رقم العينة" %}</th>
+                <th>{% trans "النوع" %}</th>
+                <th>{% trans "التاريخ" %}</th>
+                <th>{% trans "الاسم" %}</th>
+                <th>{% trans "الحالة" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sample in samples %}
+                <tr>
+                    <td>{{ sample.sample_number }}</td>
+                    <td>{{ sample.sample_type }}</td>
+                    <td>{{ sample.collected_date }}</td>
+                    <td>{{ sample.person_name }}</td>
+                    <td>
+                        <span class="status {% if sample.status == 'approved' %}approved{% elif sample.status == 'pending' %}pending{% elif sample.status == 'checked' %}checked{% else %}rejected{% endif %}">
+                            {{ sample.get_status_display|default:sample.status }}
+                        </span>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">{% trans "لا توجد عينات" %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

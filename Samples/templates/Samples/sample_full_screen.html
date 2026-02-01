@@ -1,0 +1,71 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "تفاصيل العينة" %}{% endblock %}
+{% block content %}
+<h1>{% trans "تفاصيل العينة" %}</h1>
+
+<div class="grid-main">
+    <div class="card">
+        <h3>{% trans "بيانات العينة" %}</h3>
+        <div class="info-item"><span>{% trans "نوع العينة" %}</span><strong>{{ sample.sample_type }}</strong></div>
+        <div class="info-item"><span>{% trans "التصنيف" %}</span><strong>{{ sample.category }}</strong></div>
+        <div class="info-item"><span>{% trans "تاريخ العينة" %}</span><strong>{{ sample.collected_date }}</strong></div>
+        <div class="info-item"><span>{% trans "اسم الشخص" %}</span><strong>{{ sample.person_name }}</strong></div>
+        <div class="info-item"><span>{% trans "الموقع" %}</span><strong>{{ sample.location }}</strong></div>
+    </div>
+
+    <div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="sample-no">{{ sample.sample_number }}</div>
+            <div class="status {% if sample.status == 'pending' %}pending{% elif sample.status == 'checked' %}checked{% elif sample.status == 'approved' %}approved{% else %}rejected{% endif %}">
+                {% if sample.status == 'pending' %}{% trans "قيد الفحص" %}
+                {% elif sample.status == 'checked' %}{% trans "تم الفحص" %}
+                {% elif sample.status == 'approved' %}{% trans "معتمدة" %}
+                {% elif sample.status == 'rejected' %}{% trans "مرفوضة" %}
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="post" class="card rfid-box">
+            {% csrf_token %}
+            <strong>{% trans "فحص العينة عبر RFID" %}</strong>
+            <div class="spacer"></div>
+            {% if can_act and sample.status == 'pending' %}
+                <button class="btn btn-blue" name="action" value="rfid_check">{% trans "قراءة RFID" %}</button>
+            {% else %}
+                <button class="btn btn-blue" type="button" disabled>{% trans "قراءة RFID" %}</button>
+            {% endif %}
+            <div class="muted" style="margin-top:10px;">
+                {% if sample.status == 'checked' or sample.status == 'approved' %}
+                    {% trans "تمت قراءة RFID بنجاح" %} (UID: {{ sample.rfid.uid }})
+                {% else %}
+                    {% trans "لم يتم فحص العينة بعد" %}
+                {% endif %}
+            </div>
+        </form>
+
+        {% if can_act %}
+        <form method="post" class="card">
+            {% csrf_token %}
+            <h3>{% trans "إجراءات العينة" %}</h3>
+            <div style="display:flex;gap:10px;">
+                <button class="btn btn-green" name="action" value="approve" {% if sample.status != 'checked' %}disabled{% endif %}>{% trans "اعتماد" %}</button>
+                <button class="btn btn-red" name="action" value="reject">{% trans "رفض" %}</button>
+                <a href="{% url 'sample-list-web' %}" class="btn btn-gray">{% trans "رجوع" %}</a>
+            </div>
+        </form>
+        {% endif %}
+
+        <div class="card">
+            <h3>{% trans "سجل التدقيق" %}</h3>
+            <div class="log">
+                {% for log in logs %}
+                    <div>• {{ log.action }} — {{ log.timestamp|date:'Y/m/d H:i' }}</div>
+                {% empty %}
+                    <div>{% trans "لا توجد سجلات بعد" %}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

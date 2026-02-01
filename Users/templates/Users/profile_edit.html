@@ -1,0 +1,32 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "تعديل الملف الشخصي" %}{% endblock %}
+{% block content %}
+<h1>{% trans "تعديل الملف الشخصي" %}</h1>
+<div class="card" style="max-width:520px;margin:40px auto;">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid-2">
+            <div>
+                <label>{% trans "الاسم الأول" %}</label>
+                {{ form.first_name }}
+            </div>
+            <div>
+                <label>{% trans "اسم العائلة" %}</label>
+                {{ form.last_name }}
+            </div>
+            <div style="grid-column:1/-1;">
+                <label>{% trans "البريد الإلكتروني" %}</label>
+                {{ form.email }}
+            </div>
+            <div style="grid-column:1/-1;">
+                <label>{% trans "الصورة الشخصية" %}</label>
+                {{ form.avatar }}
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn btn-blue" type="submit">{% trans "حفظ" %}</button>
+        <a class="btn btn-gray" href="{% url 'password_reset' %}">{% trans "إعادة تعيين كلمة المرور" %}</a>
+    </form>
+</div>
+{% endblock %}

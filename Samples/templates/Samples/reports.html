@@ -1,0 +1,83 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "التقارير" %}{% endblock %}
+{% block content %}
+<h1>{% trans "التقارير" %}</h1>
+
+<div class="card">
+  <h3>{% trans "فلترة التقارير" %}</h3>
+  <form method="get" class="filters" style="grid-template-columns:1fr 1fr 1fr 1fr auto;">
+    <div>
+      <label>{% trans "من تاريخ" %}</label>
+      <input type="date" name="from_date" value="{{ from_date }}">
+    </div>
+    <div>
+      <label>{% trans "إلى تاريخ" %}</label>
+      <input type="date" name="to_date" value="{{ to_date }}">
+    </div>
+    <div>
+      <label>{% trans "نوع التقرير" %}</label>
+      <select name="report_type">
+        <option value="samples" {% if report_type == 'samples' %}selected{% endif %}>{% trans "تقرير العينات" %}</option>
+        <option value="rfid" {% if report_type == 'rfid' %}selected{% endif %}>{% trans "تقرير فحص RFID" %}</option>
+        <option value="approval" {% if report_type == 'approval' %}selected{% endif %}>{% trans "تقرير الاعتماد" %}</option>
+        <option value="audit" {% if report_type == 'audit' %}selected{% endif %}>{% trans "تقرير النشاط" %}</option>
+      </select>
+    </div>
+    <div>
+      <label>{% trans "المستخدم" %}</label>
+      <select name="user_id">
+        <option value="">{% trans "الكل" %}</option>
+        {% for u in users %}
+          <option value="{{ u.id }}" {% if user_id == u.id|stringformat:'s' %}selected{% endif %}>{{ u.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-blue" type="submit">{% trans "بحث" %}</button>
+  </form>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>{{ title }}</h3>
+    <div style="display:flex;gap:10px;">
+      {% if can_export %}
+        <a class="btn btn-green" href="{% url 'reports-export-excel' %}?{{ request.GET.urlencode }}">{% trans "تصدير Excel" %}</a>
+        <a class="btn btn-red" href="{% url 'reports-export-pdf' %}?{{ request.GET.urlencode }}">{% trans "تصدير PDF" %}</a>
+      {% endif %}
+      <button class="btn btn-gray" onclick="window.print()">{% trans "طباعة" %}</button>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <table>
+    <thead>
+      <tr>
+        {% for col in columns %}
+          <th>{{ col.label }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for cell in row %}
+            <td>
+              {% if cell.is_status %}
+                <span class="status {% if cell.value == 'approved' or cell.value == 'معتمدة' %}approved{% elif cell.value == 'checked' or cell.value == 'تم التحقق' %}checked{% elif cell.value == 'pending' or cell.value == 'قيد الفحص' %}pending{% else %}rejected{% endif %}">
+                  {{ cell.value }}
+                </span>
+              {% else %}
+                {{ cell.value }}
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% empty %}
+        <tr><td colspan="{{ columns|length }}">{% trans "لا توجد بيانات" %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "قائمة العينات" %}{% endblock %}
+{% block content %}
+<h1>{% trans "قائمة العينات" %}</h1>
+
+<div class="card">
+    <h3>{% trans "فلترة العينات" %}</h3>
+    <form method="get" class="filters">
+        <div>
+            <label>{% trans "نوع العينة" %}</label>
+            <select name="sample_type">
+                <option value="">{% trans "الكل" %}</option>
+                <option value="دم" {% if sample_type == 'دم' %}selected{% endif %}>{% trans "دم" %}</option>
+                <option value="أنسجة" {% if sample_type == 'أنسجة' %}selected{% endif %}>{% trans "أنسجة" %}</option>
+            </select>
+        </div>
+        <div>
+            <label>{% trans "التصنيف" %}</label>
+            <select name="category">
+                <option value="">{% trans "الكل" %}</option>
+                <option value="جنائية" {% if category == 'جنائية' %}selected{% endif %}>{% trans "جنائية" %}</option>
+                <option value="طبية" {% if category == 'طبية' %}selected{% endif %}>{% trans "طبية" %}</option>
+            </select>
+        </div>
+        <div>
+            <label>{% trans "التاريخ" %}</label>
+            <input type="date" name="date" value="{{ date_value }}">
+        </div>
+        <div>
+            <label>{% trans "بحث" %}</label>
+            <input type="text" name="q" placeholder="{% trans "رقم العينة أو الاسم" %}" value="{{ query }}">
+        </div>
+        <button class="btn btn-blue" type="submit">{% trans "بحث" %}</button>
+    </form>
+</div>
+
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3>{% trans "قائمة العينات" %}</h3>
+        <a class="btn btn-green" href="{% url 'sample-export' %}?{{ request.GET.urlencode }}">{% trans "تصدير Excel" %}</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "رقم العينة" %}</th>
+                <th>{% trans "اسم الشخص" %}</th>
+                <th>{% trans "النوع" %}</th>
+                <th>{% trans "التصنيف" %}</th>
+                <th>{% trans "التاريخ" %}</th>
+                <th>{% trans "الحالة" %}</th>
+                <th>{% trans "الإجراءات" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sample in samples %}
+                <tr>
+                    <td>{{ sample.sample_number }}</td>
+                    <td>{{ sample.person_name }}</td>
+                    <td>{{ sample.sample_type }}</td>
+                    <td>{{ sample.category }}</td>
+                    <td>{{ sample.collected_date|date:'Y/m/d' }}</td>
+                    <td>
+                        <span class="status {% if sample.status == 'approved' %}approved{% elif sample.status == 'pending' %}pending{% elif sample.status == 'checked' %}checked{% else %}rejected{% endif %}">
+                            {{ sample.get_status_display|default:sample.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn btn-blue" href="{% url 'sample_full_screen' sample.sample_number %}">{% trans "عرض" %}</a>
+                        <a class="btn btn-gray" href="#" onclick="return false;">{% trans "تعديل" %}</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7">{% trans "لا توجد عينات" %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if page_obj %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a class="page" href="?page={{ page_obj.previous_page_number }}&q={{ query }}&sample_type={{ sample_type }}&category={{ category }}&date={{ date_value }}">‹</a>
+        {% endif %}
+        <span class="page">{{ page_obj.number }}</span>
+        {% if page_obj.has_next %}
+            <a class="page" href="?page={{ page_obj.next_page_number }}&q={{ query }}&sample_type={{ sample_type }}&category={{ category }}&date={{ date_value }}">›</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

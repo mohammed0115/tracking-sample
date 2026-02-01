@@ -1,0 +1,44 @@
+# English translations for Sample Tracking System
+msgid ""
+msgstr ""
+"Project-Id-Version: Sample Tracking 1.0\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sample Tracking"
+msgstr "Sample Tracking"
+
+msgid "Control Panel"
+msgstr "Control Panel"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Sample List"
+msgstr "Sample List"
+
+msgid "Add Sample"
+msgstr "Add Sample"
+
+msgid "Reports"
+msgstr "Reports"
+
+msgid "User Management"
+msgstr "User Management"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Edit Profile"
+msgstr "Edit Profile"
+
+msgid "Change Language"
+msgstr "Change Language"
+
+msgid "Select Language"
+msgstr "Select Language"
+
+msgid "© 2026 GSC. All rights reserved for GetSolution Co"
+msgstr "© 2026 GSC. All rights reserved for GetSolution Co"

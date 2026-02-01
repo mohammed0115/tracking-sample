@@ -1,0 +1,7 @@
+
+<h1>قائمة العينات</h1>
+<ul>
+{% for s in samples %}
+  <li><a href="/samples/{{ s.sample_number }}/">{{ s.sample_number }}</a></li>
+{% endfor %}
+</ul>

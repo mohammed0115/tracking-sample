@@ -1,0 +1,54 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "إدارة المستخدمين" %}{% endblock %}
+{% block content %}
+<h1>{% trans "إدارة المستخدمين" %}</h1>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>{% trans "قائمة المستخدمين" %}</h3>
+    <a href="{% url 'user_create' %}" class="btn btn-green">{% trans "إضافة مستخدم" %}</a>
+  </div>
+
+  <div class="spacer"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "الاسم" %}</th>
+        <th>{% trans "اسم المستخدم" %}</th>
+        <th>{% trans "البريد" %}</th>
+        <th>{% trans "الدور" %}</th>
+        <th>{% trans "الحالة" %}</th>
+        <th>{% trans "إجراءات" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in user_rows %}
+        <tr>
+          <td>{{ row.user.get_full_name|default:row.user.username }}</td>
+          <td>{{ row.user.username }}</td>
+          <td>{{ row.user.email }}</td>
+          <td>{{ row.role }}</td>
+          <td>
+            {% if row.user.is_active %}
+              <span class="status approved">{% trans "نشط" %}</span>
+            {% else %}
+              <span class="status rejected">{% trans "موقوف" %}</span>
+            {% endif %}
+          </td>
+          <td>
+            <a class="btn btn-blue" href="{% url 'user_edit' row.user.id %}" title="{% trans 'تعديل' %}">✏️</a>
+            <a class="btn btn-gray" href="{% url 'user_toggle_active' row.user.id %}" title="{% if row.user.is_active %}{% trans 'إيقاف' %}{% else %}{% trans 'تفعيل' %}{% endif %}">
+              {% if row.user.is_active %}⛔{% else %}✅{% endif %}
+            </a>
+            <a class="btn btn-red" href="{% url 'user_reset_password' row.user.id %}" title="{% trans 'إعادة تعيين' %}">🔒</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6">{% trans "لا يوجد مستخدمون" %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

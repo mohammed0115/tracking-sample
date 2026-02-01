@@ -1,0 +1,24 @@
+{% extends 'Samples/base.html' %}
+{% load i18n %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="card" style="max-width:620px;margin:40px auto;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid-2">
+      {% for field in form %}
+        <div style="grid-column:{% if forloop.counter0|divisibleby:2 %}1{% else %}2{% endif %};">
+          <label>{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="muted">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-blue" type="submit">{% trans "حفظ" %}</button>
+    <a href="{% url 'user_management' %}" class="btn btn-gray">{% trans "رجوع" %}</a>
+  </form>
+</div>
+{% endblock %}

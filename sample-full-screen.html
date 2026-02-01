@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تفاصيل العينة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --blue:#4f8df7;
+  --green:#5cbfa6;
+  --red:#ef4444;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --radius:14px;
+}
+*{box-sizing:border-box;font-family:"Cairo",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{
+  width:240px;background:#fff;padding:20px;
+  box-shadow:0 0 15px rgba(0,0,0,.05)
+}
+.sidebar h3{margin-bottom:25px}
+.sidebar a{
+  display:block;padding:12px 15px;margin-bottom:8px;
+  border-radius:10px;text-decoration:none;color:#374151;font-size:14px
+}
+.sidebar a.active,.sidebar a:hover{
+  background:#eef2ff;color:var(--blue)
+}
+
+/* Main */
+.main{flex:1;padding:30px}
+h1{margin-top:0}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:25px
+}
+
+/* Cards */
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(0,0,0,.05)
+}
+
+/* Info Panel */
+.info-item{margin-bottom:14px}
+.info-item span{
+  font-size:13px;color:var(--muted);display:block
+}
+.info-item strong{font-size:14px}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px
+}
+.sample-no{font-size:22px;font-weight:bold}
+.status{
+  padding:6px 14px;border-radius:20px;
+  color:#fff;font-size:13px
+}
+.ok{background:var(--green)}
+.pending{background:var(--blue)}
+
+/* RFID */
+.rfid-box{
+  border:2px dashed #c7d2fe;
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  margin-bottom:20px
+}
+.rfid-box strong{display:block;margin-bottom:8px}
+.rfid-result{
+  margin-top:10px;
+  font-size:13px;
+  color:var(--muted)
+}
+
+/* Actions */
+.actions{display:flex;gap:10px}
+button{
+  border:none;padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;font-size:14px
+}
+.btn-green{background:var(--green);color:#fff}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-gray{background:#e5e7eb}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>التحكم</h3>
+    <a>لوحة التحكم</a>
+    <a>قائمة العينات</a>
+    <a class="active">تفاصيل العينة</a>
+    <a>تسجيل خروج</a>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <h1>تفاصيل العينة</h1>
+
+    <div class="grid">
+
+      <!-- Left: Filter / Info -->
+      <div class="card">
+        <h3>بيانات العينة</h3>
+
+        <div class="info-item">
+          <span>نوع العينة</span>
+          <strong>دم</strong>
+        </div>
+
+        <div class="info-item">
+          <span>التصنيف</span>
+          <strong>جنائية</strong>
+        </div>
+
+        <div class="info-item">
+          <span>تاريخ العينة</span>
+          <strong>22 أبريل 2024</strong>
+        </div>
+
+        <div class="info-item">
+          <span>اسم الشخص</span>
+          <strong>يوسف أحمد</strong>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div>
+
+        <!-- Header -->
+        <div class="card header">
+          <div class="sample-no">20230422001</div>
+          <div class="status pending" id="status">قيد الفحص</div>
+        </div>
+
+        <!-- RFID -->
+        <div class="card rfid-box">
+          <strong>فحص العينة عبر RFID</strong>
+          <button class="btn-blue" onclick="scanRFID()">قراءة RFID</button>
+          <div class="rfid-result" id="rfidResult">
+            لم يتم فحص العينة بعد
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+          <h3>إجراءات العينة</h3>
+          <div class="actions">
+            <button class="btn-green" onclick="approve()">اعتماد</button>
+            <button class="btn-red">رفض</button>
+            <button class="btn-gray">رجوع</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+function scanRFID(){
+  document.getElementById("rfidResult").innerText =
+    "تمت قراءة RFID بنجاح (UID: RFID-AX92-7781)";
+  document.getElementById("status").innerText = "تم الفحص";
+  document.getElementById("status").className = "status ok";
+}
+
+function approve(){
+  alert("✅ تم اعتماد العينة بنجاح");
+}
+</script>
+
+</body>
+</html>

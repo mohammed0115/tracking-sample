@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إضافة عينة جديدة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --blue:#4f8df7;
+  --green:#5cbfa6;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --radius:14px;
+}
+*{box-sizing:border-box;font-family:"Cairo",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{
+  width:240px;background:#fff;padding:20px;
+  box-shadow:0 0 15px rgba(0,0,0,.05)
+}
+.sidebar h3{margin-bottom:25px}
+.sidebar a{
+  display:block;padding:12px 15px;margin-bottom:8px;
+  border-radius:10px;text-decoration:none;color:#374151;font-size:14px
+}
+.sidebar a.active,.sidebar a:hover{
+  background:#eef2ff;color:var(--blue)
+}
+
+/* Main */
+.main{flex:1;padding:30px}
+h1{margin-top:0}
+
+/* Top Actions */
+.top-actions{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-bottom:25px
+}
+.action-card{
+  color:#fff;padding:18px;border-radius:var(--radius);
+  display:flex;justify-content:space-between;align-items:center;
+  font-weight:600
+}
+.green{background:linear-gradient(135deg,#6ee7b7,#34b399)}
+.blue{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+
+/* Filter + Stats */
+.filter-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;margin-bottom:25px
+}
+.card{
+  background:#fff;padding:20px;border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(0,0,0,.05)
+}
+.filter-group{margin-bottom:12px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}
+select,input{
+  width:100%;padding:10px;border-radius:10px;
+  border:1px solid #ddd;font-size:14px
+}
+.stats-card{display:flex;flex-direction:column;justify-content:space-between}
+.stat{text-align:center;padding:12px;border-bottom:1px solid #eee}
+.stat:last-child{border-bottom:none}
+.stat strong{font-size:22px;color:var(--green)}
+.stat span{font-size:13px;color:var(--muted)}
+
+/* Form */
+.form-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;margin-bottom:25px
+}
+.form-actions{display:flex;gap:10px}
+button{
+  border:none;padding:10px 20px;border-radius:10px;
+  cursor:pointer;font-size:14px
+}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-gray{background:#e5e7eb}
+
+/* Table */
+.table-card{margin-top:20px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;text-align:center;font-size:14px}
+thead{background:#f1f5f9}
+tbody tr:not(:last-child){border-bottom:1px solid #eee}
+.status{padding:4px 10px;border-radius:20px;color:#fff;font-size:12px}
+.ok{background:var(--green)}
+.pending{background:var(--blue)}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>التحكم</h3>
+    <a class="active">لوحة التحكم</a>
+    <a>قائمة العينات</a>
+    <a>التقارير</a>
+    <a>تسجيل خروج</a>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <h1>إضافة عينة جديدة</h1>
+
+    <!-- Top Actions -->
+    <div class="top-actions">
+      <div class="action-card green">إضافة جديدة <span>＋</span></div>
+      <div class="action-card blue">قائمة العينات</div>
+      <div class="action-card blue">التقارير</div>
+    </div>
+
+    <!-- Filter + Stats -->
+    <div class="filter-stats">
+      <div class="card">
+        <h3>فلترة العينات</h3>
+        <div class="filter-group">
+          <label>نوع العينة</label>
+          <select id="fType">
+            <option value="">الكل</option>
+            <option value="دم">دم</option>
+            <option value="أنسجة">أنسجة</option>
+            <option value="عابرة">عابرة</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>التصنيف</label>
+          <select id="fCat">
+            <option value="">الكل</option>
+            <option value="جنائية">جنائية</option>
+            <option value="طبية">طبية</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stat"><strong>5.4</strong><span>المتوسط اليومي</span></div>
+        <div class="stat"><strong>2.1</strong><span>المتوسط الأسبوعي</span></div>
+        <div class="stat"><strong>118</strong><span>عينات اليوم</span></div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="card">
+      <h3>إضافة عينة</h3>
+      <div class="form-grid">
+        <div>
+          <label>نوع العينة</label>
+          <select>
+            <option>دم</option>
+            <option>أنسجة</option>
+            <option>عابرة</option>
+          </select>
+        </div>
+        <div>
+          <label>تاريخ العينة</label>
+          <input type="date">
+        </div>
+        <div>
+          <label>اسم الشخص</label>
+          <input type="text">
+        </div>
+        <div>
+          <label>الموقع</label>
+          <input type="text">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-blue">حفظ</button>
+        <button class="btn-green">حفظ وإضافة جديدة</button>
+        <button class="btn-gray">رجوع</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card table-card">
+      <h3>قائمة العينات</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>رقم</th><th>النوع</th><th>التاريخ</th><th>الاسم</th><th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr data-type="دم" data-cat="جنائية">
+            <td>20230422001</td><td>دم</td><td>2024/04/22</td>
+            <td>يوسف أحمد</td><td><span class="status ok">مكتملة</span></td>
+          </tr>
+          <tr data-type="أنسجة" data-cat="طبية">
+            <td>20230422002</td><td>أنسجة</td><td>2024/04/22</td>
+            <td>محمد علي</td><td><span class="status pending">قيد المراجعة</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const fType=document.getElementById("fType");
+const fCat=document.getElementById("fCat");
+[fType,fCat].forEach(f=>f.addEventListener("change",filter));
+
+function filter(){
+  document.querySelectorAll("#rows tr").forEach(r=>{
+    const ok=
+      (!fType.value||r.dataset.type===fType.value)&&
+      (!fCat.value||r.dataset.cat===fCat.value);
+    r.style.display=ok?"":"none";
+  });
+}
+</script>
+
+</body>
+</html>
